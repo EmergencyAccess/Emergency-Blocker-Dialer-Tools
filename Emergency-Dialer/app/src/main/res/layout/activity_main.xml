@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+    <TextView
+        android:id="@+id/signalStrengthTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text=""
+        android:textSize="20sp" />
+<!--    <TextView-->
+<!--        android:id="@+id/switchCellTextView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:text=""-->
+<!--        android:textSize="16sp" />-->
+    <TextView
+        android:id="@+id/wifisignalStrengthTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text=""
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/cityNameTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text=""
+        android:layout_marginTop="20dp"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/enteredNumberTextView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:text=""
+        android:textSize="24sp" />
+
+
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:alignmentMode="alignMargins"
+        android:columnCount="3"
+        android:columnOrderPreserved="false"
+        android:rowCount="5">
+
+
+        <Button
+            style="@style/NumberButton123"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:onClick="onNumberButtonClick"
+            android:text="1" />
+
+
+        <Button
+            style="@style/NumberButton123"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:onClick="onNumberButtonClick"
+            android:text="2" />
+
+        <Button
+            style="@style/NumberButton123"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:onClick="onNumberButtonClick"
+            android:text="3" />
+
+        <Button
+            style="@style/NumberButton123"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:onClick="onNumberButtonClick"
+            android:text="4" />
+
+
+        <Button
+            style="@style/NumberButton123"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:onClick="onNumberButtonClick"
+            android:text="5" />
+
+        <Button
+            style="@style/NumberButton123"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:onClick="onNumberButtonClick"
+            android:text="6" />
+
+        <Button
+            style="@style/NumberButton123"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:onClick="onNumberButtonClick"
+            android:text="7" />
+
+
+        <Button
+            style="@style/NumberButton123"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:onClick="onNumberButtonClick"
+            android:text="8" />
+
+        <Button
+            style="@style/NumberButton123"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:onClick="onNumberButtonClick"
+            android:text="9" />
+
+        <Button
+            style="@style/NumberButton123"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:onClick="onNumberButtonClick"
+            android:text="*" />
+        <Button
+            style="@style/NumberButton123"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:onClick="onNumberButtonClick"
+            android:text="0" />
+
+
+        <Button
+            style="@style/NumberButton123"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:onClick="onNumberButtonClick"
+            android:text="#" />
+
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1" />
+
+        <ImageButton
+            style="@style/NumberButton123"
+            android:id="@+id/callButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:background="#70D875"
+
+            android:src="@drawable/ic_menu_call" />
+<!--        android:onClick="onCallButtonClick"-->
+        <ImageButton
+            style="@style/NumberButton123"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:onClick="onBackspaceClick"
+            android:src="@android:drawable/ic_input_delete" />
+
+
+
+<!--        @android:drawable/ic_input_delete"-->
+
+<!--        &lt;!&ndash;        &lt;!&ndash; Empty space for zero &ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+
+
+        <!--        &lt;!&ndash; Button for digit 0 &ndash;&gt;-->
+<!--        <Button-->
+<!--            style="@style/Widget.AppCompat.Button.Colored"-->
+<!--            android:onClick="onNumberButtonClick"-->
+<!--            android:text="0" />-->
+<!--        <Button-->
+<!--            style="@style/NumberButton123"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_columnWeight="1"-->
+<!--            android:onClick="onNumberButtonClick"-->
+<!--            android:text="1" />-->
+
+
+<!--        <Button-->
+<!--            style="@style/NumberButton123"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_columnWeight="1"-->
+<!--            android:onClick="onNumberButtonClick"-->
+<!--            android:text="1" />-->
+
+<!--        <Button-->
+<!--            style="@style/NumberButton123"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_columnWeight="1"-->
+<!--            android:onClick="onNumberButtonClick"-->
+<!--            android:text="1" />-->
+
+        <!--        <Button-->
+        <!--            style="@style/Widget.AppCompat.Button.Colored"-->
+        <!--            android:layout_width="73dp"-->
+        <!--            android:layout_height="75dp"-->
+        <!--            android:layout_margin="5dp"-->
+        <!--            android:onClick="onNumberButtonClick"-->
+        <!--            android:text="2" />-->
+        <!--        <Button-->
+        <!--            style="@style/Widget.AppCompat.Button.Colored"-->
+        <!--            android:onClick="onNumberButtonClick"-->
+        <!--            android:text="2" />-->
+
+        <!--        <Button-->
+        <!--            style="@style/Widget.AppCompat.Button.Colored"-->
+        <!--            android:onClick="onNumberButtonClick"-->
+        <!--            android:text="2" />-->
+
+        <!--        <Button-->
+        <!--            style="@style/Widget.AppCompat.Button.Colored"-->
+        <!--            android:onClick="onNumberButtonClick"-->
+        <!--            android:text="3" />-->
+
+        <!--        <Button-->
+        <!--            style="@style/Widget.AppCompat.Button.Colored"-->
+        <!--            android:onClick="onNumberButtonClick"-->
+        <!--            android:text="4"-->
+        <!--            app:backgroundTint="@color/purple_500" />-->
+
+        <!--        <Button-->
+        <!--            style="@style/Widget.AppCompat.Button.Colored"-->
+        <!--            android:onClick="onNumberButtonClick"-->
+        <!--            android:text="5" />-->
+
+        <!--        <Button-->
+        <!--            style="@style/Widget.AppCompat.Button.Colored"-->
+        <!--            android:onClick="onNumberButtonClick"-->
+        <!--            android:text="6" />-->
+
+        <!--        <Button-->
+        <!--            style="@style/Widget.AppCompat.Button.Colored"-->
+        <!--            android:onClick="onNumberButtonClick"-->
+        <!--            android:text="7" />-->
+
+        <!--        <Button-->
+        <!--            style="@style/Widget.AppCompat.Button.Colored"-->
+        <!--            android:onClick="onNumberButtonClick"-->
+        <!--            android:text="8" />-->
+
+        <!--        <Button-->
+        <!--            style="@style/Widget.AppCompat.Button.Colored"-->
+        <!--            android:onClick="onNumberButtonClick"-->
+        <!--            android:text="9" />-->
+
+        <!--        &lt;!&ndash;        &lt;!&ndash; Empty space for zero &ndash;&gt;&ndash;&gt;-->
+        <!--        <Space />-->
+
+        <!--        &lt;!&ndash; Button for digit 0 &ndash;&gt;-->
+        <!--        <Button-->
+        <!--            style="@style/Widget.AppCompat.Button.Colored"-->
+        <!--            android:onClick="onNumberButtonClick"-->
+        <!--            android:text="0" />-->
+
+        <!--        &lt;!&ndash; Button for backspace &ndash;&gt;-->
+        <!--        <ImageButton-->
+        <!--            style="@style/Widget.AppCompat.Button.Colored"-->
+        <!--            android:onClick="onBackspaceClick"-->
+        <!--            android:src="@android:drawable/ic_input_delete" />-->
+
+
+    </GridLayout>
+<!--    <Space />-->
+<!--    <Space-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_columnWeight="1" />-->
+
+
+</LinearLayout>
+
