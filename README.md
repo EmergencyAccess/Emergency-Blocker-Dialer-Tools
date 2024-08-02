@@ -15,7 +15,6 @@ For more information, please refer to our publication.
 
 This application can prevent 5G/4G/3G emergency calls from being delivered to PSAPs. In particular, emergency calls can originate from cellular modems (e.g., 3G CS calls) or IMS client applications (e.g., 4G/5G PS calls) on phones. For modem-initiated calls (e.g., 3G CS call), our tool leverages [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1), an application that collects cellular network signaling, to detect connection attempts specific to emergency calls and then terminates calls by monitoring signaling messages displayed on the screen via a customized accessibility service.
 
-
 ---
 
 ### Tested Setup
@@ -102,7 +101,6 @@ python3 emer-block-v4.py -s ABCDEFGHIJ -p 397 430 1018 1563 -d
 
 Upon detecting the 'RRC Connection Request' message, the Emerg-Call-Blocker will send a low-level shutdown command to the device
 
-
 ---
 ### Evaluation
 For signal strengths ranging from good to poor in 5G/4G/3G networks, the signaling time from RRC Connection Request to 3G CC Setup or 5G/4G SIP REGISTER/INVITE is typically longer than 0.5 seconds and can extend up to 5 seconds when the signal strength is poor (we terminated testing when the time exceeded 5 seconds). However, the time required by Emerg-Call-Blocker from signaling message detection to call process shutdown is at most **0.4 seconds**, which is 20% shorter than the signaling time, ensuring prompt call termination before it is fully established.
@@ -116,6 +114,7 @@ By using this software, you agree that you are doing so at your own risk. The au
 **Important Notice:**
 Sometimes the input screen source may be stuck and not be transmitted from the device to the computer running the Emerg-Call-Blocker. This may result in text detection not being performed in real time, further leading to the emergency call being made. Before dialing an emergency call, you must check if the text detection is working properly. We do not guarantee that the tool will work every time. It is recommended to test the tool by dialing a normal call first to ensure functionality. Additionally, you should be aware of each dial you make and terminate any unintended calls before they are forwarded to Public Safety Answering Points (PSAPs).
 Alternatively, you may contact the author of [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1) to request a customized version for an additional cost. This version would include Android logcats indicating each RRC message, helping to better determine emergency dials promptly.
+
 ---
 ### Credits
 We sincerely appreciate the [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1) and [AdbFastScreenshots](https://github.com/hansalemaos/adbnativeblitz) teams for making their great softwares available.
@@ -125,7 +124,6 @@ We sincerely appreciate the [Cellular Pro](https://play.google.com/store/apps/de
 We developed the “Emergency Dialer” mobile app to address issues faced by emergency users (UEs) in RANs with poor signals when initiating emergency calls. The app handles call requests from emergency UEs in two scenarios: (1) If signals from home PLMN’s observed 3GPP RANs are weak while those from visited PLMNs are moderate or good, the app temporarily disables the SIM/eSIM, switching the UE to an anonymous mode to access available nearby RANs; and (2) If signals from both home and visited PLMNs are weak but Wi-Fi RANs with moderate or good signals are available, the app initiates emergency calls through VoWiFi by translating the dialed emergency number to the local dispatch center’s phone number (e.g., 248-796-5500 for the City of Southfield in the U.S.) and placing the call using telephony APIs like TelecomManager.placeCall() on Android. Users need to configure their UEs to prefer Wi-Fi calling for this scenario.
 
 ---
-
 ### Tested Setup
 * Tested Mobile Device (with Qualcomm Snapdragon CPU): Samsung Galaxy S21, Google
 Pixel 5, LG G8X, and Motorola G Stylus 5G
@@ -177,22 +175,15 @@ cd M911/Emergency-Dialer
 
 **Note**: Make sure your Android device has the necessary permissions to access phone features and network settings required by the Emergency Dialer app
 
-
-
 ---
-
-
-
 ### Usage
 Use the Emergency Dialer as your phone application for initiating emergency calls. The following image shows the dialing panel of the Emergency Dialer.
 
 <img src="https://i.imgur.com/N6OK7wj.jpeg" alt="Emergency Dialer Screenshot" style="width: 30%;"/>
 
-
 To make an emergency call, open the Emergency Dialer app and use the dialing panel just as you would with any standard phone application. The app will automatically handle the call request based on the network conditions, ensuring that the call is routed through the most reliable network available.
 
 **Note:** To prevent unintended emergency calls, you can modify the app to replace the emergency number with a normal number before the dial intent is broadcast. Ensure that you take full responsibility for any dialed emergency calls.
-
 
 ---
 ### Disclaimer
