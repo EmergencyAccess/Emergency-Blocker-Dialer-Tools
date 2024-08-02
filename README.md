@@ -13,7 +13,7 @@ For more information, please refer to our publication.
 
 ## 1. Emerg-Call-Blocker
 
-This application can prevent 5G/4G/3G emergency calls from being delivered to PSAPs. In particular, emergency calls can originate from cellular modems (e.g., 3G CS calls) or IMS client applications (e.g., 4G/5G PS calls) on phones. If initiated by the IMS client app, Emerg-Call-Blocker intercepts and drops all call signaling (e.g., SIP REGISTER/INVITE). For modem-initiated calls (e.g., 3G CS call), our tool leverages Cellular Pro [28], an application that collects cellular network signaling, to detect connection attempts specific to emergency calls and then terminates calls by monitoring signaling messages displayed on the screen via a customized accessibility service.
+This application can prevent 5G/4G/3G emergency calls from being delivered to PSAPs. In particular, emergency calls can originate from cellular modems (e.g., 3G CS calls) or IMS client applications (e.g., 4G/5G PS calls) on phones. For modem-initiated calls (e.g., 3G CS call), our tool leverages [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1), an application that collects cellular network signaling, to detect connection attempts specific to emergency calls and then terminates calls by monitoring signaling messages displayed on the screen via a customized accessibility service.
 
 
 ---
@@ -39,8 +39,8 @@ Make sure you have the following installed on your system:
 Clone the repository to your local machine using the following command:
 
 ```
-git clone https://github.com/EmergencyAccess/Emergency-Blocker-Dialer-Tools.git
-cd Emergency-Blocker-Dialer-Tools/Emerg-Call-Blocker
+git clone https://github.com/kyle0121chen/M911.git
+cd M911/Emerg-Call-Blocker
 ```
 #### Step 2: Install Dependencies
 Install the required Python packages using pip. You can create a virtual environment to manage dependencies more easily:
@@ -63,18 +63,44 @@ pip install Pillow
 **Note**: The tesserocr package requires the Tesseract OCR engine. Make sure Tesseract is installed on your system. You can install it using the following instructions based on your operating system:
 * **Windows**:
 Download the Tesseract installer from the [official repository](https://github.com/tesseract-ocr/tesseract) and follow the installation instructions.
+
 ---
 ### Usage
 
-To use the script, simply run:
+1. Update your ADB path:
 ```
-python3 emer-block-v4.py -s YOUR_DEVICE_ID
+ADB_path = r"C:\Android\android-sdk\platform-tools\adb.exe"
 ```
-You can find your device ID by running the following command:
+2. Confirm the desired area for text detection:
 ```
+# Add '-c' option to enable detection
+python3 emer-block-v4.py -s YOUR_DEVICE_ID -c
+
+# You can find your device ID by running the following command:
 adb devices
+# The device ID will be listed under the List of devices attached section.
+
+
 ```
-The device ID will be listed under the List of devices attached section.
+    Select two points to define a rectangle for text detection. For example, the red top-left circle and the bottom-right circle in the following image will create a rectangular area:
+<img src="https://hackmd.io/_uploads/Syvq91sF0.png" alt="Selected two points for text detection" style="width: 30%;"/>
+
+![image](https://hackmd.io/_uploads/SJ44CyjF0.png)
+
+3. To use the Emerg-Call-Blocker to detect 'RRC Connection Request' in your desired area, simply run:
+```
+python3 emer-block-v4.py -s YOUR_DEVICE_ID -p P1_X P1_Y P2_X P2_Y
+
+# For example:
+python3 emer-block-v4.py -s ABCDEFGHIJ -p 397 430 1018 1563
+
+# You can use the '-d' option to display the monitored area:
+python3 emer-block-v4.py -s ABCDEFGHIJ -p 397 430 1018 1563 -d
+```
+<img src="https://hackmd.io/_uploads/r1slbxjY0.png" alt="Monitored area" style="width: 30%;"/>
+<img src="https://hackmd.io/_uploads/SJ45egiY0.png" alt="Monitored area" style="width: 30%;"/>
+
+Upon detecting the 'RRC Connection Request' message, the Emerg-Call-Blocker will send a low-level shutdown command to the device
 
 ---
 ### Evaluation
@@ -94,8 +120,6 @@ Alternatively, you may contact the author of [Cellular Pro](https://play.google.
 ---
 ### Credits
 We sincerely appreciate the [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1) and [AdbFastScreenshots](https://github.com/hansalemaos/adbnativeblitz) teams for making their great softwares available.
-
-
 
 
 
@@ -124,10 +148,9 @@ Make sure you have the following installed on your system:
 Clone the repository to your local machine using the following command:
 
 ```
-git clone https://github.com/EmergencyAccess/Emergency-Blocker-Dialer-Tools.git
-cd Emergency-Blocker-Dialer-Tools//Emergency-Dialer
+git clone https://github.com/kyle0121chen/M911.git
+cd M911/Emergency-Dialer
 ```
-
 #### Step 2: Open the Project in Android Studio
 1. Open Android Studio:
 
