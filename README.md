@@ -83,9 +83,9 @@ adb devices
 
 ```
     Select two points to define a rectangle for text detection. For example, the red top-left circle and the bottom-right circle in the following image will create a rectangular area:
-<img src="https://hackmd.io/_uploads/Syvq91sF0.png" alt="Selected two points for text detection" style="width: 30%;"/>
+<img src="https://i.imgur.com/wzxMMDP.png" alt="Selected two points for text detection" style="width: 30%;"/>
 
-![image](https://hackmd.io/_uploads/SJ44CyjF0.png)
+![image](https://i.imgur.com/zkg9CpE.png)
 
 3. To use the Emerg-Call-Blocker to detect 'RRC Connection Request' in your desired area, simply run:
 ```
@@ -97,10 +97,11 @@ python3 emer-block-v4.py -s ABCDEFGHIJ -p 397 430 1018 1563
 # You can use the '-d' option to display the monitored area:
 python3 emer-block-v4.py -s ABCDEFGHIJ -p 397 430 1018 1563 -d
 ```
-<img src="https://hackmd.io/_uploads/r1slbxjY0.png" alt="Monitored area" style="width: 30%;"/>
-<img src="https://hackmd.io/_uploads/SJ45egiY0.png" alt="Monitored area" style="width: 30%;"/>
+<img src="https://i.imgur.com/WQBpTcc.png" alt="Monitored area" style="width: 30%;"/>
+<img src="https://i.imgur.com/wLQgZ5C.png" alt="Monitored area" style="width: 30%;"/>
 
 Upon detecting the 'RRC Connection Request' message, the Emerg-Call-Blocker will send a low-level shutdown command to the device
+
 
 ---
 ### Evaluation
@@ -115,13 +116,9 @@ By using this software, you agree that you are doing so at your own risk. The au
 **Important Notice:**
 Sometimes the input screen source may be stuck and not be transmitted from the device to the computer running the Emerg-Call-Blocker. This may result in text detection not being performed in real time, further leading to the emergency call being made. Before dialing an emergency call, you must check if the text detection is working properly. We do not guarantee that the tool will work every time. It is recommended to test the tool by dialing a normal call first to ensure functionality. Additionally, you should be aware of each dial you make and terminate any unintended calls before they are forwarded to Public Safety Answering Points (PSAPs).
 Alternatively, you may contact the author of [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1) to request a customized version for an additional cost. This version would include Android logcats indicating each RRC message, helping to better determine emergency dials promptly.
-
-
 ---
 ### Credits
 We sincerely appreciate the [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1) and [AdbFastScreenshots](https://github.com/hansalemaos/adbnativeblitz) teams for making their great softwares available.
-
-
 
 
 ## 2. Emergency Dialer
