@@ -1,6 +1,6 @@
-# Emergency Blocker/Dialer Tools
+# M911: Emergency Blocker/Dialer Tools
 
-Emergency Blocker/Dialer Tools is a suite of applications designed to enhance the handling and interception of emergency calls in various network scenarios. The suite includes two main applications:
+M911 Tools is a suite of applications designed to enhance the handling and interception of emergency calls in various network scenarios. The suite includes two main applications:
 
 **Emerg-Call-Blocker**: Prevents 5G/4G/3G emergency calls from being delivered to Public Safety Answering Points (PSAPs). This tool intercepts and terminates emergency calls initiated by both cellular modems and IMS client applications, ensuring calls are blocked before they reach emergency services.
 
@@ -11,7 +11,7 @@ These tools provide crucial solutions for managing emergency communications, enh
 For more information, please refer to our publication.
 
 
-## Emerg-Call-Blocker
+## 1. Emerg-Call-Blocker
 
 This application can prevent 5G/4G/3G emergency calls from being delivered to PSAPs. In particular, emergency calls can originate from cellular modems (e.g., 3G CS calls) or IMS client applications (e.g., 4G/5G PS calls) on phones. If initiated by the IMS client app, Emerg-Call-Blocker intercepts and drops all call signaling (e.g., SIP REGISTER/INVITE). For modem-initiated calls (e.g., 3G CS call), our tool leverages Cellular Pro [28], an application that collects cellular network signaling, to detect connection attempts specific to emergency calls and then terminates calls by monitoring signaling messages displayed on the screen via a customized accessibility service.
 
@@ -22,7 +22,8 @@ This application can prevent 5G/4G/3G emergency calls from being delivered to PS
 * Computer: Dell XPS 13 with Intel i7-1195G7 CPU, 8GB RAM
 * Operating System: Windows 11
 * Python Version: Python 3.10
-* Tested Mobile Device: Samsung S21 (with Qualcomm Snapdragon CPU)
+* Tested Mobile Devices (with Qualcomm Snapdragon CPU): Samsung Galaxy S21, Google
+Pixel 5, LG G8X, and Motorola G Stylus 5G.
 
 ---
 ### Installation
@@ -38,8 +39,8 @@ Make sure you have the following installed on your system:
 Clone the repository to your local machine using the following command:
 
 ```
-git clone https://github.com/kyle0121chen/M911.git
-cd M911/Emerg-Call-Blocker
+git clone https://github.com/EmergencyAccess/Emergency-Blocker-Dialer-Tools.git
+cd Emergency-Blocker-Dialer-Tools/Emerg-Call-Blocker
 ```
 #### Step 2: Install Dependencies
 Install the required Python packages using pip. You can create a virtual environment to manage dependencies more easily:
@@ -75,30 +76,38 @@ adb devices
 ```
 The device ID will be listed under the List of devices attached section.
 
-
 ---
-### Credits
-We sincerely appreciate the [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1) and [AdbFastScreenshots](https://github.com/hansalemaos/adbnativeblitz) teams for making their great softwares available.
+### Evaluation
+For signal strengths ranging from good to poor in 5G/4G/3G networks, the signaling time from RRC Connection Request to 3G CC Setup or 5G/4G SIP REGISTER/INVITE is typically longer than 0.5 seconds and can extend up to 5 seconds when the signal strength is poor (we terminated testing when the time exceeded 5 seconds). However, the time required by Emerg-Call-Blocker from signaling message detection to call process shutdown is at most **0.4 seconds**, which is 20% shorter than the signaling time, ensuring prompt call termination before it is fully established.
+
+**Note:** To further reduce the time cost, consider using a computer with a powerful CPU for the text detection procedure.
 
 ---
 ### Disclaimer
 By using this software, you agree that you are doing so at your own risk. The authors and contributors of this project are not responsible for any damages, data loss, or other issues that may arise from the use of this software. It is provided "as is" without warranty of any kind, either express or implied. **You are solely responsible for ensuring that the software meets your needs and for any outcomes resulting from its use.**
 
 **Important Notice:**
-Sometimes the input screen source may be stuck and not be transmitted from the device to the computer running the Emerg-Call-Blocker. This may result in text detection not being performed in real time. Before dialing an emergency call, you must check if the text detection is working properly. It is recommended to test the tool by dialing a normal call first to ensure functionality. Additionally, you should be aware of each dial you make and terminate any unintended calls before they are forwarded to Public Safety Answering Points (PSAPs).
+Sometimes the input screen source may be stuck and not be transmitted from the device to the computer running the Emerg-Call-Blocker. This may result in text detection not being performed in real time, further leading to the emergency call being made. Before dialing an emergency call, you must check if the text detection is working properly. We do not guarantee that the tool will work every time. It is recommended to test the tool by dialing a normal call first to ensure functionality. Additionally, you should be aware of each dial you make and terminate any unintended calls before they are forwarded to Public Safety Answering Points (PSAPs).
+Alternatively, you may contact the author of [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1) to request a customized version for an additional cost. This version would include Android logcats indicating each RRC message, helping to better determine emergency dials promptly.
+
+
+---
+### Credits
+We sincerely appreciate the [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1) and [AdbFastScreenshots](https://github.com/hansalemaos/adbnativeblitz) teams for making their great softwares available.
 
 
 
 
 
 
-## Emergency Dialer
+## 2. Emergency Dialer
 We developed the “Emergency Dialer” mobile app to address issues faced by emergency users (UEs) in RANs with poor signals when initiating emergency calls. The app handles call requests from emergency UEs in two scenarios: (1) If signals from home PLMN’s observed 3GPP RANs are weak while those from visited PLMNs are moderate or good, the app temporarily disables the SIM/eSIM, switching the UE to an anonymous mode to access available nearby RANs; and (2) If signals from both home and visited PLMNs are weak but Wi-Fi RANs with moderate or good signals are available, the app initiates emergency calls through VoWiFi by translating the dialed emergency number to the local dispatch center’s phone number (e.g., 248-796-5500 for the City of Southfield in the U.S.) and placing the call using telephony APIs like TelecomManager.placeCall() on Android. Users need to configure their UEs to prefer Wi-Fi calling for this scenario.
 
 ---
 
 ### Tested Setup
-* Tested Mobile Device: Samsung S21 (with Qualcomm Snapdragon CPU)
+* Tested Mobile Device (with Qualcomm Snapdragon CPU): Samsung Galaxy S21, Google
+Pixel 5, LG G8X, and Motorola G Stylus 5G
 * Android Version: 11
 
 ---
@@ -115,9 +124,10 @@ Make sure you have the following installed on your system:
 Clone the repository to your local machine using the following command:
 
 ```
-git clone https://github.com/kyle0121chen/M911.git
-cd M911/Emergency-Dialer
+git clone https://github.com/EmergencyAccess/Emergency-Blocker-Dialer-Tools.git
+cd Emergency-Blocker-Dialer-Tools//Emergency-Dialer
 ```
+
 #### Step 2: Open the Project in Android Studio
 1. Open Android Studio:
 
