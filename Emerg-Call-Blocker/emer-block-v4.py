@@ -7,6 +7,7 @@ import subprocess
 import argparse
 from PIL import Image, ImageEnhance, ImageFilter
 import threading
+import sys
 
 ADB_path = r"C:\Android\android-sdk\platform-tools\adb.exe"
 
@@ -176,26 +177,38 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Select Android device")
     
     # Add the device ID argument
-    # Usage: python3 emer-block-v4.py -s YOUR_DEVICE_ID
     parser.add_argument("-s", "--device", help="The ID of the device")
+    # Option for detecting -c
+    parser.add_argument("-c", action="store_true", help="Enable the function to detect the coordination of your cursor")
+    # Option for displaying the detected area
+    parser.add_argument("-d", action="store_true", help="Enable the function to show the area for text detection") 
+    # Option for providing coordinates
+    parser.add_argument('-p', type=int, nargs=4, metavar=('x1', 'y1', 'x2', 'y2'),
+                        help="Provide coordinates for two points as x1 y1 x2 y2")
     
     # Parse the arguments
     args = parser.parse_args()
+    if args.c:
+        print("Begin detection: Click to the left or right of your cursor to display the coordinates, and press 'q' to exit.")
+    if args.p:
+        if len(args.p) != 4:
+            print("Error: You must provide exactly four coordinates (x1, y1, x2, y2).")
+            sys.exit(1)
+        x1, y1, x2, y2 = args.p
+        print(f"Coordinates received: ({x1}, {y1}) and ({x2}, {y2})")
     
     # Call the function with the provided device ID
     device_id = args.device
     
-    # Configure your target region:
+    # Sample target region:
     # Point 1: The top-left corner of the selected area
-    x1_coor = 837
-    y1_coor = 384
+    # x1_coor = 837
+    # y1_coor = 384
 
     # Point 2: The bottom-right corner of the selected area
-    x2_coor = 1068
-    y2_coor = 1477
+    # x2_coor = 1068
+    # y2_coor = 1477
 
-    # Define the region to capture: (x, y, width, height)
-    # region = (x1_coor, y1_coor, x2_coor-x1_coor, y2_coor-y1_coor)  # Example region
     
     with AdbFastScreenshots(
 		adb_path=ADB_path,
@@ -213,22 +226,19 @@ if __name__ == "__main__":
             # Record the start time
             start_time = time.time()
 
-            # You can use the following lines to obtain the coordinates of your target area for text detection
-            # cv2.namedWindow('Image')
-
-            # Left/right click to obtain the coordination of your pointer
-            # cv2.setMouseCallback('Image', get_coordinates)
-            # cv2.imshow("Image", image)
-
-            # Crop the input source into the desired region to enhance performance
-            cropped_image = image[y1_coor:y2_coor, x1_coor:x2_coor+100]
-            
-            thread = threading.Thread(target=threaded_detection, args=(device_id, cropped_image, start_time))
-            thread.start()
-
-            # Optional: visualize your cropped area
-            # Notably, it may reduce your performance
-            cv2.imshow("Image", cropped_image)
+            if args.c:
+                    # Enable the function of get_coordinates
+                    cv2.namedWindow('Image')
+                    cv2.setMouseCallback('Image', get_coordinates)
+                    # Show the entire screen for users to determine coordinations
+                    cv2.imshow("Image", image)
+            else:
+                cropped_image = image[y1:y2, x1:x2+100]
+                thread = threading.Thread(target=threaded_detection, args=(device_id, cropped_image, start_time))
+                thread.start()
+                if args.d:
+                    # Show the monitored area
+                    cv2.imshow("Image", cropped_image)
 
             if cv2.waitKey(1) & 0xFF == ord("q"):
                 break
