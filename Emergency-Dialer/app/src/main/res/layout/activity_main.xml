@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,41 +9,76 @@
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".MainActivity">
-    <TextView
-        android:id="@+id/signalStrengthTextView"
+
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/switchCellTextView"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_centerHorizontal="true"-->
+    <!--        android:text=""-->
+    <!--        android:textSize="16sp" />-->
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text=""
-        android:textSize="20sp" />
-<!--    <TextView-->
-<!--        android:id="@+id/switchCellTextView"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:text=""-->
-<!--        android:textSize="16sp" />-->
-    <TextView
-        android:id="@+id/wifisignalStrengthTextView"
+        android:layout_marginTop="10dp"
+        android:layout_weight="2"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/signalStrengthTextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text=""
+            android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/wifisignalStrengthTextView"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textSize="15sp"/>
+
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text=""
-        android:textSize="20sp" />
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/threshold_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:hint="Enter threshold"
+            android:inputType="number"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Save"
+            android:textSize="15sp" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/cityNameTextView"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text=""
-        android:layout_marginTop="20dp"
         android:textSize="20sp" />
 
     <TextView
         android:id="@+id/enteredNumberTextView"
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
@@ -53,11 +87,10 @@
         android:textSize="24sp" />
 
 
-
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0"
+        android:layout_weight="4"
         android:alignmentMode="alignMargins"
         android:columnCount="3"
         android:columnOrderPreserved="false"
@@ -146,6 +179,7 @@
             android:layout_columnWeight="1"
             android:onClick="onNumberButtonClick"
             android:text="*" />
+
         <Button
             style="@style/NumberButton123"
             android:layout_width="0dp"
@@ -170,15 +204,15 @@
             android:layout_columnWeight="1" />
 
         <ImageButton
-            style="@style/NumberButton123"
             android:id="@+id/callButton"
+            style="@style/NumberButton123"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
             android:background="#70D875"
 
             android:src="@drawable/ic_menu_call" />
-<!--        android:onClick="onCallButtonClick"-->
+        <!--        android:onClick="onCallButtonClick"-->
         <ImageButton
             style="@style/NumberButton123"
             android:layout_width="0dp"
@@ -188,41 +222,40 @@
             android:src="@android:drawable/ic_input_delete" />
 
 
+        <!--        @android:drawable/ic_input_delete"-->
 
-<!--        @android:drawable/ic_input_delete"-->
-
-<!--        &lt;!&ndash;        &lt;!&ndash; Empty space for zero &ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+        <!--        &lt;!&ndash;        &lt;!&ndash; Empty space for zero &ndash;&gt;&ndash;&gt;&ndash;&gt;-->
 
 
         <!--        &lt;!&ndash; Button for digit 0 &ndash;&gt;-->
-<!--        <Button-->
-<!--            style="@style/Widget.AppCompat.Button.Colored"-->
-<!--            android:onClick="onNumberButtonClick"-->
-<!--            android:text="0" />-->
-<!--        <Button-->
-<!--            style="@style/NumberButton123"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_columnWeight="1"-->
-<!--            android:onClick="onNumberButtonClick"-->
-<!--            android:text="1" />-->
+        <!--        <Button-->
+        <!--            style="@style/Widget.AppCompat.Button.Colored"-->
+        <!--            android:onClick="onNumberButtonClick"-->
+        <!--            android:text="0" />-->
+        <!--        <Button-->
+        <!--            style="@style/NumberButton123"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_columnWeight="1"-->
+        <!--            android:onClick="onNumberButtonClick"-->
+        <!--            android:text="1" />-->
 
 
-<!--        <Button-->
-<!--            style="@style/NumberButton123"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_columnWeight="1"-->
-<!--            android:onClick="onNumberButtonClick"-->
-<!--            android:text="1" />-->
+        <!--        <Button-->
+        <!--            style="@style/NumberButton123"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_columnWeight="1"-->
+        <!--            android:onClick="onNumberButtonClick"-->
+        <!--            android:text="1" />-->
 
-<!--        <Button-->
-<!--            style="@style/NumberButton123"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_columnWeight="1"-->
-<!--            android:onClick="onNumberButtonClick"-->
-<!--            android:text="1" />-->
+        <!--        <Button-->
+        <!--            style="@style/NumberButton123"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_columnWeight="1"-->
+        <!--            android:onClick="onNumberButtonClick"-->
+        <!--            android:text="1" />-->
 
         <!--        <Button-->
         <!--            style="@style/Widget.AppCompat.Button.Colored"-->
@@ -294,11 +327,11 @@
 
 
     </GridLayout>
-<!--    <Space />-->
-<!--    <Space-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_columnWeight="1" />-->
+    <!--    <Space />-->
+    <!--    <Space-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_columnWeight="1" />-->
 
 
 </LinearLayout>

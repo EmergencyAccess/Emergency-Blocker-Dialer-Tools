@@ -38,47 +38,6 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.*
 
-//class MainActivity : AppCompatActivity() {
-//
-//    private lateinit var signalStrengthTextView: TextView
-//    private lateinit var telephonyManager: TelephonyManager
-//    private lateinit var phoneStateListener: PhoneStateListener
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
-//
-//        signalStrengthTextView = findViewById(R.id.signalStrengthTextView)
-//        telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-//
-//        phoneStateListener = object : PhoneStateListener() {
-//            @RequiresApi(Build.VERSION_CODES.Q)
-//            override fun onSignalStrengthsChanged(signalStrength: SignalStrength) {
-//                super.onSignalStrengthsChanged(signalStrength)
-//                updateSignalStrengthText(signalStrength)
-//            }
-//        }
-//        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS)
-//    }
-//
-//    fun onDetectSignalButtonClick(view: View) {
-//        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS)
-//    }
-//
-//    @RequiresApi(Build.VERSION_CODES.Q)
-//    private fun updateSignalStrengthText(signalStrength: SignalStrength) {
-//        val threshold = 120
-//
-//        val signalInfo = "Signal Strength: ${signalStrength.cellSignalStrengths[0].dbm} dBm\nSwitch to wifi: ${(signalStrength.cellSignalStrengths[0].dbm + threshold)<0}"
-//        signalStrengthTextView.text = signalInfo
-//    }
-//
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
-//    }
-//}
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var enteredNumberTextView: TextView
@@ -91,7 +50,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var switchCellTextView: TextView
     private lateinit var switchWifiTextView: TextView
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var cityNumberMap: Map<String, String>
     private lateinit var countyPSAPMap: Map<String, String>
     private lateinit var callButton: ImageButton
 
@@ -100,9 +58,10 @@ class MainActivity : AppCompatActivity() {
     var best_signal = -999
     var is_switch = false
     var current_strength = 0;
+    private val PREFS_NAME = "prefs"
+    private val THRESHOLD_KEY = "threshold"
+    private var threshold = 100  // Default value
 
-    private var cityName: String? = "0"
-    private var cityNumber: String? = "0"
     private var countyName: String = "0"
     private var PSAPNumber: String = "0"
 
@@ -126,6 +85,25 @@ class MainActivity : AppCompatActivity() {
         cityNameTextView = findViewById(R.id.cityNameTextView)
         registerReceiver(wifiReceiver, IntentFilter(WifiManager.RSSI_CHANGED_ACTION))
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        val thresholdInput = findViewById<EditText>(R.id.threshold_input)
+        val saveButton = findViewById<Button>(R.id.save_button)
+
+        // Retrieve the stored threshold value
+        val sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        threshold = sharedPreferences.getInt(THRESHOLD_KEY, threshold)
+        // Display the current threshold value as hint
+        thresholdInput.hint = "Current threshold: $threshold"
+        saveButton.setOnClickListener {
+            val newThreshold = thresholdInput.text.toString().toIntOrNull()
+            if (newThreshold != null) {
+                threshold = newThreshold
+                with(sharedPreferences.edit()) {
+                    putInt(THRESHOLD_KEY, threshold)
+                    apply()
+                }
+                thresholdInput.hint = "Current threshold: $threshold"
+            }
+        }
 
         // Check permission before initial location inquiry
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -168,7 +146,7 @@ class MainActivity : AppCompatActivity() {
             @RequiresApi(Build.VERSION_CODES.Q)
             override fun onSignalStrengthsChanged(signalStrength: SignalStrength) {
                 super.onSignalStrengthsChanged(signalStrength)
-                updateSignalStrengthText(signalStrength)
+                updateSignalStrengthText(signalStrength, threshold)
 
             }
         }
@@ -177,7 +155,7 @@ class MainActivity : AppCompatActivity() {
         callButton = findViewById(R.id.callButton)
         callButton.setOnClickListener { view ->
 //            val enteredPhoneNumber = enteredNumberTextView.text.toString()
-            onCallButtonClick(view, cityNumber)
+            onCallButtonClick(view, PSAPNumber)
         }
 
 
@@ -239,7 +217,6 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-
     data class bestInfo(
         val signal: Int,
         val Earfcn: Int?,
@@ -254,8 +231,6 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
 
         } else {
-
-
             val neighboringCellInfoList = telephonyManager.getAllCellInfo()
 
             for (neighboringCellInfo in neighboringCellInfoList) {
@@ -268,35 +243,21 @@ class MainActivity : AppCompatActivity() {
                     best_pci = cellIdentityInfo.mPci
 
                 }
-                    // Display information (you can customize this part)
                 Log.d(
                     "SignalStrengthActivity",
                     "Cell ID: ${neighboringCellInfo.cellIdentity}, Signal Strength: $signalStrengthValue dBm\n  TEST:best pci: ${best_pci}, best signal: ${best_signal}"
                 )
             }
-            // Handle devices with Android versions Q and above
-            // NeighboringCellInfo is deprecated on newer versions
-            // Alternative approaches might involve using CellInfo or SignalStrengthListener
         }
         return bestInfo(best_signal, best_earfcn, best_pci, 0)
     }
 
     private fun checkAndDisplayWifiSignalStrength(): mywifiInfo? {
         val wifiInfo: WifiInfo? = wifiManager.connectionInfo
-
-
-
         if (wifiInfo != null) {
             val signalStrength = wifiInfo.rssi // Signal strength in dBm
             val signalLevel = WifiManager.calculateSignalLevel(signalStrength, 5) // Signal level (0-4)
-
-            wifisignalStrengthTextView.text = "Available WiFi: $signalStrength dBm\nSignal Level: $signalLevel/4"
-//            if(is_switch && signalLevel>=3 && !(best_signal > current_strength)){
-//                switchWifiTextView.text = "Switch to WiFi: true"
-//            }
-//            else{
-//                switchWifiTextView.text = "Switch to WiFi: false"
-//            }
+            wifisignalStrengthTextView.text = "WiFi: $signalStrength dBm\nSignal Level: $signalLevel/4"
             return mywifiInfo(signalStrength, signalLevel)
         } else {
             wifisignalStrengthTextView.text = "Unable to retrieve Wi-Fi information"
@@ -305,16 +266,37 @@ class MainActivity : AppCompatActivity() {
     }
 
 //su shell -c 'service call phone 193 i32 1 i32 1'
-    private fun executeAdbCommand() {
+    private fun adbDisableSIM() {
         try {
-            val process = Runtime.getRuntime().exec(arrayOf("su", "-c", "service call phone 193 i32 0 i32 0"))
-//            val process = Runtime.getRuntime().exec(command)
+            val process = Runtime.getRuntime().exec(arrayOf("su", "shell", "-c", "service call phone 193 i32 0 i32 0"))
             val exitCode = process.waitFor()
 
             if (exitCode == 0) {
                 showToast("Disabling SIM card...")
             } else {
                 showToast("Command execution failed with exit code $exitCode")
+            }
+            // Unregister the PhoneStateListener
+            runOnUiThread {
+                telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
+            }
+        } catch (e: Exception) {
+            showToast("Error executing command: ${e.message}")
+        }
+    }
+    private fun adbEnableSIM() {
+        try {
+            val process = Runtime.getRuntime().exec(arrayOf("su", "shell", "-c", "service call phone 193 i32 0 i32 1"))
+            val exitCode = process.waitFor()
+
+            if (exitCode == 0) {
+                showToast("Enable SIM card...")
+            } else {
+                showToast("Command execution failed with exit code $exitCode")
+            }
+            // Re-register the PhoneStateListener
+            runOnUiThread {
+                telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS)
             }
         } catch (e: Exception) {
             showToast("Error executing command: ${e.message}")
@@ -326,18 +308,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
     @RequiresApi(Build.VERSION_CODES.Q)
-    private fun updateSignalStrengthText(signalStrength: SignalStrength) {
+    private fun updateSignalStrengthText(signalStrength: SignalStrength, threshold: Int) {
         current_strength = signalStrength.cellSignalStrengths[0].dbm
-        val threshold = 120
         is_switch = (signalStrength.cellSignalStrengths[0].dbm + threshold)<0
-
-
         val best_sig = measureNeighboringSignalStrength()
-
         val signalInfo = "Serving Cell: ${signalStrength.cellSignalStrengths[0].dbm} dBm\nMonitoring Cell: ${best_sig.signal} dBm, Pci: ${best_sig.Pci}, Earfcn: ${best_sig.Earfcn}"
         signalStrengthTextView.text = signalInfo
-//        switchCellTextView.text = "Switch to other cell: ${is_switch}"
-
     }
     override fun onDestroy() {
         super.onDestroy()
@@ -345,10 +321,6 @@ class MainActivity : AppCompatActivity() {
         unregisterReceiver(wifiReceiver)
 
     }
-
-
-
-
 
 // Keyboard
     fun onNumberButtonClick(view: View) {
@@ -368,32 +340,43 @@ class MainActivity : AppCompatActivity() {
 
     fun onCallButtonClick(view: View, localEmerNumber: String?) {
         try{
+            Log.d(
+                "M911",
+                "Call button clicked!"
+            )
             val currentWifi = checkAndDisplayWifiSignalStrength()
             var phoneNumber = enteredNumberTextView.text.toString()
+            Log.d(
+                "M911",
+                "Entered number: $phoneNumber"
+            )
             if (phoneNumber.isNotEmpty()) {
                 // Serving signal strength lower than Threshold
                 if(is_switch){
-                    // Switch to other cell
                     if(best_signal > current_strength){
-                        executeAdbCommand()
+                        // Switch to other cell
+                        Log.d("M911", "Disabling SIM...\n")
+                        adbDisableSIM()
                     }
                     else{
                         if (currentWifi != null) {
-                            // Swtich to WiFi
+                            // Swtich to WiFi Calling
                             if(currentWifi.level >= 3){
                                 if(phoneNumber == "911"){
-                                    Log.d("PhoneNumber", "Fetching local 911 phone number...\n")
-                                    phoneNumber=localEmerNumber.toString()
+                                    Log.d("M911", "Fetching local 911 phone number...\n")
+                                    phoneNumber = localEmerNumber.toString()
                                 }
                             }
                         }
                     }
                 }
 
-                phoneNumber=localEmerNumber.toString()
-                Log.d("PhoneNumber", "Calling: $phoneNumber")
-                phoneNumber="5179209648"
+                Log.d("M911", "Calling: $phoneNumber")
 
+                Log.d(
+                    "M911",
+                    "Ready to broadcast CALL_INTENT!"
+                )
                 val dialIntent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phoneNumber"))
 
                 // Ensure that the device can handle the dial intent
@@ -402,40 +385,20 @@ class MainActivity : AppCompatActivity() {
                     startActivity(dialIntent)
                 } else {
                     // Handle the case where there is no activity to handle the dial intent
-                    Toast.makeText(
-                        applicationContext,
-                        "Cannot find an app to handle the dial action.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showToast("Cannot find an app to handle the dial action.")
                 }
             } else {
 
                 // Handle the case where the phone number is empty
                 measureNeighboringSignalStrength()
-                Toast.makeText(
-                    applicationContext,
-                    "Please enter a valid phone number.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                showToast("Please enter a valid phone number.")
             }
         } catch (e: SecurityException) {
             // Handle the case where the app doesn't have necessary permissions
-            Toast.makeText(
-                applicationContext,
-                "Permission to make a call is not granted.",
-                Toast.LENGTH_SHORT
-            ).show()
+            showToast("Permission to make a call is not granted.")
         } catch (e: Exception) {
             // Handle other exceptions
-            e.printStackTrace()
-            Toast.makeText(
-                applicationContext,
-                "Error occurred while dialing the call.",
-                Toast.LENGTH_SHORT
-            ).show()
-    //            runAsRoot()
-                // Handle the call action
-                // You may want to implement actual call functionality here
+            showToast("Error occurred while dialing the call.")
         }
     }
 // End keyboard
@@ -450,27 +413,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getLastLocation() {
-//        if (ActivityCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.ACCESS_FINE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.ACCESS_COARSE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            // TODO: Consider calling
-//            //    ActivityCompat#requestPermissions
-//            // here to request the missing permissions, and then overriding
-//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//            //                                          int[] grantResults)
-//            // to handle the case where the user grants the permission. See the documentation
-//            // for ActivityCompat#requestPermissions for more details.
-//            return
-//        }
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
                 location?.let {
-//                    getCityName(it)
                     getCountyName(it)
                 }
             }
@@ -484,7 +429,7 @@ class MainActivity : AppCompatActivity() {
             if (addresses.isNotEmpty()) {
                 countyName = addresses[0].subAdminArea
                 PSAPNumber = countyPSAPMap[countyName].toString()
-                if (cityNumber != null) {
+                if (countyName != null) {
                     cityNameTextView.text = "Current location: $countyName\nPSAP Number: $PSAPNumber"
                 } else {
                     cityNameTextView.text = "Current location: $countyName\nNumber not found!"
