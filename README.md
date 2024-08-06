@@ -163,7 +163,31 @@ cd M911/Emergency-Dialer
     * Connect your Android device to your computer via USB.
     * Enable `Developer Options` and `USB Debugging`  on your device.
 
-#### Step 4: Run the Application
+#### Step 4: Add your local PSAP information
+1. Update the county_numbers.json File
+    * Locate the county_numbers.json file in the project directory:
+    ``` 
+    /app/src/main/assets/county_numbers.json.
+    ```
+    * Open the county_numbers.json file in a text editor.
+    * Add your local PSAP (Public Safety Answering Point) information to the JSON file. The file stores pairs of County Name and its local PSAP number. Ensure the information is correctly formatted, for example:
+    ```
+    {
+        "county_numbers": [
+            {
+                "county": "Your County Name",
+                "number": "Your PSAP Number"
+            },
+            {
+                "county": "Another County Name",
+                "number": "Another PSAP Number"
+            }
+        ]
+    }
+    ```
+    **Note:** We have preloaded the local PSAP information for Michigan. Make sure to add and save your local PSAP information in the county_numbers.json file before proceeding.
+
+#### Step 5: Run the Application
 1. Run on Device:
 
     * Click on the `Run` button in Android Studio or press `Shift + F10`.
@@ -179,9 +203,11 @@ cd M911/Emergency-Dialer
 ### Usage
 Use the Emergency Dialer as your phone application for initiating emergency calls. The following image shows the dialing panel of the Emergency Dialer.
 
-<img src="https://i.imgur.com/N6OK7wj.jpeg" alt="Emergency Dialer Screenshot" style="width: 30%;"/>
+<img src="https://i.imgur.com/RY6fQWh.jpeg" alt="Emergency Dialer Screenshot" style="width: 30%;"/>
 
 To make an emergency call, open the Emergency Dialer app and use the dialing panel just as you would with any standard phone application. The app will automatically handle the call request based on the network conditions, ensuring that the call is routed through the most reliable network available.
+
+**Optional:** In the app, there is a pre-defined cellular signal strength threshold set at -120 dBm. If the signal from the home cell is weaker than this threshold while signals from visited PLMNs (Public Land Mobile Networks) are moderate or good, the app will temporarily disable the SIM/eSIM, switching the User Equipment (UE) to an anonymous mode to access available nearby Radio Access Networks (RANs). Users can configure this threshold value in the app by simply typing the desired value into the threshold field and then clicking the "save" button. From that point onward, the customized threshold will be applied.
 
 **Note:** To prevent unintended emergency calls, you can modify the app to replace the emergency number with a normal number before the dial intent is broadcast. Ensure that you take full responsibility for any dialed emergency calls.
 
