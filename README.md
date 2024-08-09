@@ -12,8 +12,18 @@ For more information, please refer to our publication.
 
 
 ## 1. Emerg-Call-Blocker
+For comprehensive protection across all cellular generations—5G, 4G, and 3G—you can run Emerg-Call-Blocker-5G/4G alongside Emerg-Call-Blocker-3G. When an emergency call is initiated over a 5G or 4G network, Emerg-Call-Blocker-5G/4G detects and filters out the associated SIP messages. In scenarios where a weak cellular signal causes the phone to default to a 3G Circuit-Switched (CS) call, Emerg-Call-Blocker-3G will block these modem-initiated calls. Together, these tools provide a robust solution for preventing emergency calls from being routed to PSAPs during testing or other scenarios.
+### Emerg-Call-Blocker-5G/4G
+Emerg-Call-Blocker-5G/4G is designed to intercept and block emergency calls originating from IMS clients on 5G and 4G networks. The tool intercepts and drops SIP REGISTER/INVITE signaling at the IP layer, effectively preventing these calls from being routed to IMS servers and, ultimately, to PSAPs.
 
-This application can prevent 5G/4G/3G emergency calls from being delivered to PSAPs. In particular, emergency calls can originate from cellular modems (e.g., 3G CS calls) or IMS client applications (e.g., 4G/5G PS calls) on phones. For modem-initiated calls (e.g., 3G CS call), our tool leverages [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1), an application that collects cellular network signaling, to detect connection attempts specific to emergency calls and then terminates calls by monitoring signaling messages displayed on the screen via a customized accessibility service.
+### Emerg-Call-Blocker-3G
+This application is an extension of the Emerg-Call-Blocker-5G/4G, designed specifically for 3G networks.
+In particular, emergency calls can originate from cellular modems (e.g., 3G CS calls) or IMS client applications (e.g., 4G/5G PS calls) on phones. For modem-initiated calls (e.g., 3G CS call), our tool leverages [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1), an application that collects cellular network signaling, to detect connection attempts specific to emergency calls and then terminates calls by monitoring signaling messages displayed on the screen via a customized accessibility service.
+
+Emerg-Call-Blocker-3G is an extension of the Emerg-Call-Blocker-5G/4G tool, specifically designed for blocking emergency calls on 3G networks. Emergency calls on 3G networks typically originate from cellular modems using CS technology. To detect and block these calls, the tool leverages [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1), an application that collects cellular network signaling data. Emerg-Call-Blocker-3G monitors the signaling messages displayed on the phone screen through a customized accessibility service. The tool records the phone screen to capture each frame of Cellular Pro’s on-screen signaling, then processes these frames using the Python cv2 module and Optical Character Recognition (OCR) to detect specific keywords related to emergency calls.
+
+Once a specific cellular signaling message, such as an RRC Connection Request, is detected, Emerg-Call-Blocker-3G terminates the call by executing a low-level shutdown of phone processes using the Android command `setprop sys.powerctl shutdown`. This ensures that 3G emergency calls are effectively blocked and prevented from reaching PSAPs.
+
 
 ---
 
@@ -27,21 +37,87 @@ Pixel 5, LG G8X, and Motorola G Stylus 5G.
 ---
 ### Installation
 
-#### Prerequisites
+#### Emerg-Call-Blocker-5G/4G
+##### Prerequisites
+Make sure you have the following installed on your system:
+* Android Debug Bridge (ADB)
+* ndk-build for Android (can be installed via Android Studio)
+
+For **ndk-build**, ensure that your Windows/Linux system supports it. You may need to install Android Studio, which includes the NDK plugin necessary for building the project.
+
+To install Android Studio and set up **ndk-build**:
+
+1. Update and install required dependencies:
+
+```
+sudo apt update && sudo apt install git cmake ninja-build python python3-distutils openjdk-8-jdk qemu-kvm
+```
+2. Download Android Studio from https://developer.android.com/studio/ (ca. 1GB) and unpack the downloaded ZIP file. Open up a terminal and change to the directory to which you unpacked the ZIP file. To start Android Studio, run the following commands:
+```
+cd android-studio/bin
+./studio.sh
+
+# Follow the steps in the setup wizard to complete the installation.
+```
+**Note:** If you want to run Android Applications in the Android Emulator, follow the steps below. Reference: https://www.boden.io/getting-started/installing_dependencies/linux/
+
+3. Install the NDK plugin:
+```
+Follow the steps in the reference to install NDK plugin.
+Reference: https://developer.android.com/studio/projects/install-ndk
+```
+
+4. Locate your NDK path:
+
+```
+Example: /home/user/Android/Sdk/ndk/26.1.10909125/ndk-build
+```
+
+##### Folder Structure
+```
+Emerg-Call-Blocker/5G4G
+|- jni (included external libs + build scripts) 
+|- libs (generated folder when building)
+|- obj (generated folder when building)
+|- src (source code: We will only use main.c now.) 
+```
+##### Step 1: Clone the Repository
+Clone the repository to your local machine using the following command:
+```
+git clone https://github.com/EmergencyAccess/Emergency-Blocker-Dialer-Tools.git
+cd Emergency-Blocker-Dialer-Tools/Emerg-Call-Blocker/5G4G
+```
+##### Step 2: Build the Project
+Run the following command in the source folder to build the project using ndk-build:
+```
+ndk-build
+```
+To clean the output:
+```
+ndk-build clean
+```
+##### Output
+The default output is a tool similar to TCPdump that can be run directly on an Android device. By configuring the Android.mk file, you can also build a module that runs on the Android system.
+
+
+---
+
+#### Emerg-Call-Blocker-3G
+##### Prerequisites
 Make sure you have the following installed on your system:
 
 * Python 3.7 or later
 * pip (Python package installer)
 * Android Debug Bridge (ADB)
 
-#### Step 1: Clone the Repository
+##### Step 1: Clone the Repository
 Clone the repository to your local machine using the following command:
 
 ```
-git clone https://github.com/kyle0121chen/M911.git
-cd M911/Emerg-Call-Blocker
+git clone https://github.com/EmergencyAccess/Emergency-Blocker-Dialer-Tools.git
+cd Emergency-Blocker-Dialer-Tools/Emerg-Call-Blocker/3G
 ```
-#### Step 2: Install Dependencies
+##### Step 2: Install Dependencies
 Install the required Python packages using pip. You can create a virtual environment to manage dependencies more easily:
 1. Create a virtual environment (optional):
 ```
@@ -65,6 +141,68 @@ Download the Tesseract installer from the [official repository](https://github.c
 
 ---
 ### Usage
+
+#### Emerg-Call-Blocker-5G/4G
+1. Push the Built File to Your Device
+Once the project is built, you need to transfer the generated binary to your Android device. Use the following adb command to push the built file (usually located in the libs directory) to a directory on your device, such as /data/local/tmp:
+
+    ```
+    adb push libs/armeabi-v7a/block /data/local/tmp/
+    ```
+2. Change the file's permissions to make it executable:
+
+    ```
+    adb shell
+    su
+    chmod +x /data/local/tmp/block
+    # Example: Block IPv6 ESP packets with a size over 900 bytes
+    ./block -v 6 -p ESP -l 900  
+    ```
+3. Set up iptables to direct traffic to the NFQUEUE:
+    * Insert the rule:
+    ```
+    ip6tables -I OUTPUT -j NFQUEUE --queue-num 0
+    ```
+    * Check the rule:
+    ```
+    ip6tables -L OUTPUT
+    ```
+4. Execute the `block` tool and make a 5G/4G phone call:
+    * Get help:
+    ```
+    ./block -h
+    ```
+    * Block IPv4/v6 packets by protocol:
+    ```
+    # Protocol List: TCP, UDP, ESP
+    ./block -v [IP_Version] -p [Protocol]
+    ```
+        
+    * Block IPv4/v6 packets by packet length:
+    ```
+    ./block -v [IP_Version] -l [Length]
+    
+    # Example: To block IPv6 TCP packets with a size over 900 bytes (starting from the IP layer):
+    ./block -v 6 -p TCP -l 900
+    ```
+    * Block **only** `SIP INVITE` messages over IPv4/IPv6 for TCP, UDP, and ESP using `-b` option:
+    ```
+    # Example: Block IPv4 SIP INVITE for TCP, UDP, and ESP on port 5060:
+    ./block -v 4 -b -p 5060
+    ```
+5. Reset iptables after testing:
+    * Remove the rule:
+    ```
+    ip6tables -D OUTPUT -j NFQUEUE --queue-num 0
+    ```
+    * Check the rule:
+    ```
+    ip6tables -L OUTPUT
+    ```
+    **Note**: Before making another call, please remember to set up the iptables rules again to ensure that traffic is properly directed to the block application
+    
+---
+#### Emerg-Call-Blocker-3G
 
 1. Update your ADB path:
 ```
@@ -101,8 +239,7 @@ python3 emer-block-v4.py -s ABCDEFGHIJ -p 397 430 1018 1563 -d
 
 Upon detecting the 'RRC Connection Request' message, the Emerg-Call-Blocker will send a low-level shutdown command to the device
 
----
-### Evaluation
+**Evaluation**
 For signal strengths ranging from good to poor in 5G/4G/3G networks, the signaling time from RRC Connection Request to 3G CC Setup or 5G/4G SIP REGISTER/INVITE is typically longer than 0.5 seconds and can extend up to 5 seconds when the signal strength is poor (we terminated testing when the time exceeded 5 seconds). However, the time required by Emerg-Call-Blocker from signaling message detection to call process shutdown is at most **0.4 seconds**, which is 20% shorter than the signaling time, ensuring prompt call termination before it is fully established.
 
 **Note:** To further reduce the time cost, consider using a computer with a powerful CPU for the text detection procedure.
@@ -143,8 +280,8 @@ Make sure you have the following installed on your system:
 Clone the repository to your local machine using the following command:
 
 ```
-git clone https://github.com/kyle0121chen/M911.git
-cd M911/Emergency-Dialer
+git clone https://github.com/EmergencyAccess/Emergency-Blocker-Dialer-Tools.git
+cd Emergency-Blocker-Dialer-Tools/Emergency-Dialer
 ```
 #### Step 2: Open the Project in Android Studio
 1. Open Android Studio:

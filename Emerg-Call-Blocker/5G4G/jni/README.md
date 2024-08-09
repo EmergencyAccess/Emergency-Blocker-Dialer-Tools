@@ -1,0 +1,3 @@
+# Block packet
+
+ndk-build
