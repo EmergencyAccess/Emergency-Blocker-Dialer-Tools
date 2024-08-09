@@ -203,41 +203,50 @@ Once the project is built, you need to transfer the generated binary to your And
     
 ---
 #### Emerg-Call-Blocker-3G
+* Download [Split Screen Launcher](https://play.google.com/store/apps/details?id=com.ccssoftwareinc.splitscreenlauncher) from the Play Store for multi-tasking:
+    1. Launch two apps on the screen simultaneously as the follow:
+        (1) Cellular Pro
+        (2) Phone app
+        <img src="https://i.imgur.com/lr4xlv8.jpeg" alt="Launch two apps simultaneously" style="width: 50%;"/>
+        **Note:** To improve the accuracy of text recognition, you can enlarge the CellularPro window.
+    2. Filter out redundant messages in Cellular Pro:
+        1. Click the `Filter` icon
+        2. Deselect all options, then select only `UMTS-NAS` and `UMTS-RRC` from the menu 
+        <img src="https://i.imgur.com/8Gi66wA.jpeg" alt="Cellular Pro filter" style="width: 50%;"/>
 
-1. Update your ADB path:
-```
-ADB_path = r"C:\Android\android-sdk\platform-tools\adb.exe"
-```
-2. Confirm the desired area for text detection:
-```
-# Add '-c' option to enable detection
-python3 emer-block-v4.py -s YOUR_DEVICE_ID -c
+* Configure the Emerg-Call-Blocker-3G for real-time text detection:
+    1. Update your ADB path:
+    ```
+    ADB_path = r"C:\Android\android-sdk\platform-tools\adb.exe"
+    ```
+    2. Confirm the desired area for text detection:
+    ```
+    # Add '-c' option to enable detection
+    python3 emer-block-v4.py -s YOUR_DEVICE_ID -c
 
-# You can find your device ID by running the following command:
-adb devices
-# The device ID will be listed under the List of devices attached section.
+    # You can find your device ID by running the following command:
+    adb devices
+    # The device ID will be listed under the List of devices attached section.
+    ```
+        Select two points to define a rectangle for text detection. For example, the red top-left circle and the bottom-right circle in the following image will create a rectangular area:
+    <img src="https://i.imgur.com/wzxMMDP.png" alt="Selected two points for text detection" style="width: 40%;"/>
 
+    ![image](https://i.imgur.com/zkg9CpE.png)
 
-```
-    Select two points to define a rectangle for text detection. For example, the red top-left circle and the bottom-right circle in the following image will create a rectangular area:
-<img src="https://i.imgur.com/wzxMMDP.png" alt="Selected two points for text detection" style="width: 30%;"/>
+    3. To use the Emerg-Call-Blocker-3G to detect 'RRC Connection Request' in your desired area, simply run:
+    ```
+    python3 emer-block-v4.py -s YOUR_DEVICE_ID -p P1_X P1_Y P2_X P2_Y
 
-![image](https://i.imgur.com/zkg9CpE.png)
+    # For example:
+    python3 emer-block-v4.py -s ABCDEFGHIJ -p 397 430 1018 1563
 
-3. To use the Emerg-Call-Blocker to detect 'RRC Connection Request' in your desired area, simply run:
-```
-python3 emer-block-v4.py -s YOUR_DEVICE_ID -p P1_X P1_Y P2_X P2_Y
+    # You can use the '-d' option to display the monitored area:
+    python3 emer-block-v4.py -s ABCDEFGHIJ -p 397 430 1018 1563 -d
+    ```
+    <img src="https://i.imgur.com/WQBpTcc.png" alt="Monitored area" style="width: 30%;"/>
+    <img src="https://i.imgur.com/wLQgZ5C.png" alt="Monitored area" style="width: 30%;"/>
 
-# For example:
-python3 emer-block-v4.py -s ABCDEFGHIJ -p 397 430 1018 1563
-
-# You can use the '-d' option to display the monitored area:
-python3 emer-block-v4.py -s ABCDEFGHIJ -p 397 430 1018 1563 -d
-```
-<img src="https://i.imgur.com/WQBpTcc.png" alt="Monitored area" style="width: 30%;"/>
-<img src="https://i.imgur.com/wLQgZ5C.png" alt="Monitored area" style="width: 30%;"/>
-
-Upon detecting the 'RRC Connection Request' message, the Emerg-Call-Blocker will send a low-level shutdown command to the device
+    Upon detecting the 'RRC Connection Request' message, the Emerg-Call-Blocker will send a low-level shutdown command to the device
 
 **Evaluation**
 For signal strengths ranging from good to poor in 5G/4G/3G networks, the signaling time from RRC Connection Request to 3G CC Setup or 5G/4G SIP REGISTER/INVITE is typically longer than 0.5 seconds and can extend up to 5 seconds when the signal strength is poor (we terminated testing when the time exceeded 5 seconds). However, the time required by Emerg-Call-Blocker from signaling message detection to call process shutdown is at most **0.4 seconds**, which is 20% shorter than the signaling time, ensuring prompt call termination before it is fully established.
