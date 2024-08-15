@@ -272,7 +272,7 @@ We developed the “Emergency Dialer” mobile app to address issues faced by em
 ---
 ### Tested Setup
 * Tested Mobile Device (with Qualcomm Snapdragon CPU): Samsung Galaxy S21, Google
-Pixel 5, LG G8X, and Motorola G Stylus 5G
+Pixel 5
 * Android Version: 11
 
 ---
