@@ -258,8 +258,12 @@ For signal strengths ranging from good to poor in 5G/4G/3G networks, the signali
 By using this software, you agree that you are doing so at your own risk. The authors and contributors of this project are not responsible for any damages, data loss, or other issues that may arise from the use of this software. It is provided "as is" without warranty of any kind, either express or implied. **You are solely responsible for ensuring that the software meets your needs and for any outcomes resulting from its use.**
 
 **Important Notice:**
-Sometimes the input screen source may be stuck and not be transmitted from the device to the computer running the Emerg-Call-Blocker. This may result in text detection not being performed in real time, further leading to the emergency call being made. Before dialing an emergency call, you must check if the text detection is working properly. We do not guarantee that the tool will work every time. It is recommended to test the tool by dialing a normal call first to ensure functionality. Additionally, you should be aware of each dial you make and terminate any unintended calls before they are forwarded to Public Safety Answering Points (PSAPs).
+To avoid possible ethical issues, it is important to consult your IRB (Institutional Review Board) to obtain approval or a waiver, as policies may vary among institutions.
+Besides, Emerg-Call-Blocker works only with Android phones and has not been tested on all models.
+A preliminary experiment (e.g., dialing non-emergency calls) is needed to verify functionality with your specific phone models and operators.
+Sometimes the input screen source may be stuck and not be transmitted from the device to the computer running the Emerg-Call-Blocker. This may result in text detection not being performed in real time, further leading to the call being made. Before dialing an emergency call, you must check if the text detection is working properly. It is recommended to test the tool by dialing a normal call first to ensure functionality. Additionally, you should be aware of each dial you make and terminate any unintended calls before they are forwarded to Public Safety Answering Points (PSAPs).
 Alternatively, you may contact the author of [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1) to request a customized version for an additional cost. This version would include Android logcats indicating each RRC message, helping to better determine emergency dials promptly.
+
 
 ---
 ### Credits
