@@ -4,7 +4,7 @@ M911 Tools is a suite of applications designed to enhance the handling and inter
 
 **Emerg-Call-Blocker**: Prevents 5G/4G/3G emergency calls from being delivered to Public Safety Answering Points (PSAPs). This tool intercepts and terminates emergency calls initiated by both cellular modems and IMS client applications, ensuring calls are blocked before they reach emergency services.
 
-**Emergency Dialer**: Addresses issues faced by emergency users (UEs) in areas with poor signal reception. The app improves the reliability of emergency call connections by switching to the best available network, including Wi-Fi, and routing calls through local dispatch center phone numbers when necessary.
+**Emerg-Call-Dialer**: Addresses issues faced by emergency users (UEs) in areas with poor signal reception. The app improves the reliability of emergency call connections by switching to the best available network, including Wi-Fi, and routing calls through local dispatch center phone numbers when necessary.
 
 These tools provide crucial solutions for managing emergency communications, enhancing user safety, and ensuring efficient call handling in critical situations.
 
@@ -266,8 +266,8 @@ Alternatively, you may contact the author of [Cellular Pro](https://play.google.
 We sincerely appreciate the [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1) and [AdbFastScreenshots](https://github.com/hansalemaos/adbnativeblitz) teams for making their great softwares available.
 
 
-## 2. Emergency Dialer
-We developed the “Emergency Dialer” mobile app to address issues faced by emergency users (UEs) in RANs with poor signals when initiating emergency calls. The app handles call requests from emergency UEs in two scenarios: (1) If signals from home PLMN’s observed 3GPP RANs are weak while those from visited PLMNs are moderate or good, the app temporarily disables the SIM/eSIM, switching the UE to an anonymous mode to access available nearby RANs; and (2) If signals from both home and visited PLMNs are weak but Wi-Fi RANs with moderate or good signals are available, the app initiates emergency calls through VoWiFi by translating the dialed emergency number to the local dispatch center’s phone number (e.g., 248-796-5500 for the City of Southfield in the U.S.) and placing the call using telephony APIs like TelecomManager.placeCall() on Android. Users need to configure their UEs to prefer Wi-Fi calling for this scenario.
+## 2. Emerg-Call-Dialer
+We developed the “Emerg-Call-Dialer” mobile app to address issues faced by emergency users (UEs) in RANs with poor signals when initiating emergency calls. The app handles call requests from emergency UEs in two scenarios: (1) If signals from home PLMN’s observed 3GPP RANs are weak while those from visited PLMNs are moderate or good, the app temporarily disables the SIM/eSIM, switching the UE to an anonymous mode to access available nearby RANs; and (2) If signals from both home and visited PLMNs are weak but Wi-Fi RANs with moderate or good signals are available, the app initiates emergency calls through VoWiFi by translating the dialed emergency number to the local dispatch center’s phone number (e.g., 248-796-5500 for the City of Southfield in the U.S.) and placing the call using telephony APIs like TelecomManager.placeCall() on Android. Users need to configure their UEs to prefer Wi-Fi calling for this scenario.
 
 ---
 ### Tested Setup
@@ -343,15 +343,15 @@ cd Emergency-Blocker-Dialer-Tools/Emergency-Dialer
 
     * Ensure that your device is configured to prefer Wi-Fi calling. This can typically be done in the phone's `settings` under `Network & Internet` -> `Mobile network` -> `Advanced` -> `Wi-Fi calling`.
 
-**Note**: Make sure your Android device has the necessary permissions to access phone features and network settings required by the Emergency Dialer app
+**Note**: Make sure your Android device has the necessary permissions to access phone features and network settings required by the Emerg-Call-Dialer app
 
 ---
 ### Usage
-Use the Emergency Dialer as your phone application for initiating emergency calls. The following image shows the dialing panel of the Emergency Dialer.
+Use the Emerg-Call-Dialer as your phone application for initiating emergency calls. The following image shows the dialing panel of the Emerg-Call-Dialer.
 
-<img src="https://i.imgur.com/RY6fQWh.jpeg" alt="Emergency Dialer Screenshot" style="width: 30%;"/>
+<img src="https://i.imgur.com/RY6fQWh.jpeg" alt="Emerg-Call-Dialer Screenshot" style="width: 30%;"/>
 
-To make an emergency call, open the Emergency Dialer app and use the dialing panel just as you would with any standard phone application. The app will automatically handle the call request based on the network conditions, ensuring that the call is routed through the most reliable network available.
+To make an emergency call, open the Emerg-Call-Dialer app and use the dialing panel just as you would with any standard phone application. The app will automatically handle the call request based on the network conditions, ensuring that the call is routed through the most reliable network available.
 
 **Optional:** In the app, there is a pre-defined cellular signal strength threshold set at -120 dBm. If the signal from the home cell is weaker than this threshold while signals from visited PLMNs (Public Land Mobile Networks) are moderate or good, the app will temporarily disable the SIM/eSIM, switching the User Equipment (UE) to an anonymous mode to access available nearby Radio Access Networks (RANs). Users can configure this threshold value in the app by simply typing the desired value into the threshold field and then clicking the "save" button. From that point onward, the customized threshold will be applied.
 
@@ -362,5 +362,5 @@ To make an emergency call, open the Emergency Dialer app and use the dialing pan
 By using this software, you agree that you are doing so at your own risk. The authors and contributors of this project are not responsible for any damages, data loss, or other issues that may arise from the use of this software. It is provided "as is" without warranty of any kind, either express or implied. **You are solely responsible for ensuring that the software meets your needs and for any outcomes resulting from its use.**
 
 **Important Notice:**
-The Emergency Dialer app is only validated on the tested setup. You should be aware of each dial you make and terminate any unintended calls before they are forwarded to Public Safety Answering Points (PSAPs).
+The Emerg-Call-Dialer app is only validated on the tested setup. You should be aware of each dial you make and terminate any unintended calls before they are forwarded to Public Safety Answering Points (PSAPs).
 
