@@ -2,27 +2,22 @@
 
 M911 Tools is a suite of applications designed to enhance the handling and interception of emergency calls in various network scenarios. The suite includes two main applications:
 
-**Emerg-Call-Blocker**: Prevents 5G/4G/3G emergency calls from being delivered to Public Safety Answering Points (PSAPs). This tool intercepts and terminates emergency calls initiated by both cellular modems and IMS client applications, ensuring calls are blocked before they reach emergency services.
+**Emerg-Call-Blocker**: Intercepts and blocks all SIP-based emergency call signaling on test phones by monitoring network interfaces. If the phone attempts to bypass this by initiating 3G emergency calls via cellular modems, [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1) is used to detect and terminate these attempts using Optical Character Recognition (OCR) to monitor signaling messages. The tool then shuts down the phone immediately to prevent the call. This ensures that no emergency calls, whether 4G/5G or 3G, can be successfully initiated. The tool is intended solely for validating the discussed emergency system defects.
 
 **Emerg-Call-Dialer**: Addresses issues faced by emergency users (UEs) in areas with poor signal reception. The app improves the reliability of emergency call connections by switching to the best available network, including Wi-Fi, and routing calls through local dispatch center phone numbers when necessary.
 
 These tools provide crucial solutions for managing emergency communications, enhancing user safety, and ensuring efficient call handling in critical situations.
 
-For more information, please refer to our publication.
+**For more information, please refer to our publication.**
 
 
 ## 1. Emerg-Call-Blocker
-For comprehensive protection across all cellular generations—5G, 4G, and 3G—you can run Emerg-Call-Blocker-5G/4G alongside Emerg-Call-Blocker-3G. When an emergency call is initiated over a 5G or 4G network, Emerg-Call-Blocker-5G/4G detects and filters out the associated SIP messages. In scenarios where a weak cellular signal causes the phone to default to a 3G Circuit-Switched (CS) call, Emerg-Call-Blocker-3G will block these modem-initiated calls. Together, these tools provide a robust solution for preventing emergency calls from being routed to PSAPs during testing or other scenarios.
-### Emerg-Call-Blocker-5G/4G
-Emerg-Call-Blocker-5G/4G is designed to intercept and block emergency calls originating from IMS clients on 5G and 4G networks. The tool intercepts and drops SIP REGISTER/INVITE signaling at the IP layer, effectively preventing these calls from being routed to IMS servers and, ultimately, to PSAPs.
+Emerg-Call-Blocker intercepts and discards all SIP-based emergency call signaling messages by monitoring all network interfaces on each test phone. Each emergency call attempt fails when any SIP REGISTER/INVITE message sent by the IMS client application is blocked by Emerg-Call-Blocker. It is important to note that REGISTER and INVITE messages are used by subscribed and anonymous UEs, respectively, to initiate emergency calls, as anonymous UEs do not need SIP registration.
 
-### Emerg-Call-Blocker-3G
-This application is an extension of the Emerg-Call-Blocker-5G/4G, designed specifically for 3G networks.
-In particular, emergency calls can originate from cellular modems (e.g., 3G CS calls) or IMS client applications (e.g., 4G/5G PS calls) on phones. For modem-initiated calls (e.g., 3G CS call), our tool leverages [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1), an application that collects cellular network signaling, to detect connection attempts specific to emergency calls and then terminates calls by monitoring signaling messages displayed on the screen via a customized accessibility service.
+However, if the phone fails to initiate 4G/5G emergency calls via the IMS client application, it may attempt to dial 3G emergency calls through cellular modems using legacy 3G CS call signaling, such as CC Setup, thereby bypassing Emerg-Call-Blocker’s SIP-based call signaling interception. To address this, we employ [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1), an application designed to collect cellular network signaling from cellular modems. We detect and terminate connection attempts (e.g., RRC connection establishment) by monitoring signaling messages displayed on the phone screen using OCR, effectively blocking these 3G emergency calls as well. Once a specific cellular signaling message, such as an RRC Connection Request, is detected, Emerg-Call-Blocker-3G terminates the call by executing a low-level shutdown of phone using the Android command `setprop sys.powerctl shutdown`. This ensures that 3G emergency calls are effectively blocked and prevented from reaching PSAPs. Thus, none of the emergency calls can complete initialization or be made.
 
-Emerg-Call-Blocker-3G is an extension of the Emerg-Call-Blocker-5G/4G tool, specifically designed for blocking emergency calls on 3G networks. Emergency calls on 3G networks typically originate from cellular modems using CS technology. To detect and block these calls, the tool leverages [Cellular Pro](https://play.google.com/store/apps/details?id=make.more.r2d2.google.cellular_pro&hl=en_US&pli=1), an application that collects cellular network signaling data. Emerg-Call-Blocker-3G monitors the signaling messages displayed on the phone screen through a customized accessibility service. The tool records the phone screen to capture each frame of Cellular Pro’s on-screen signaling, then processes these frames using the Python cv2 module and Optical Character Recognition (OCR) to detect specific keywords related to emergency calls.
+**Note:** This tool is intended only for validating the emergency system defects discussed in our work. You may need to modify the tool to suit your specific needs.
 
-Once a specific cellular signaling message, such as an RRC Connection Request, is detected, Emerg-Call-Blocker-3G terminates the call by executing a low-level shutdown of phone processes using the Android command `setprop sys.powerctl shutdown`. This ensures that 3G emergency calls are effectively blocked and prevented from reaching PSAPs.
 
 
 ---
