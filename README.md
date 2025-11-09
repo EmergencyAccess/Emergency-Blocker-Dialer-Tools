@@ -363,3 +363,8 @@ By using this software, you agree that you are doing so at your own risk. The au
 **Important Notice:**
 The Emerg-Call-Dialer app is only validated on the tested setup. You should be aware of each dial you make and terminate any unintended calls before they are forwarded to Public Safety Answering Points (PSAPs).
 
+## References
+We are kindly asking any academic works utilizing and/or incorporating this software to cite one of these references listed below:
+    
+* Yiwen Hu, Min-Yue Chen, Haitian Yan, Chuan-Yi Cheng, Guan-Hua Tu, Chi-Yu Li, Tian Xie, Chunyi Peng, Li Xiao, and Jiliang Tang. **Uncovering Problematic Designs Hindering Ubiquitous Cellular Emergency Services Access.** In Proceedings of the 30th Annual International Conference on Mobile Computing and Networking (**ACM MobiCom '24**).
+* Yiwen Hu, Min-Yue Chen, Guan-Hua Tu, Chi-Yu Li, Sihan Wang, Jingwen Shi, Tian Xie, Li Xiao, Chunyi Peng, Zhaowei Tan, and Songwu Lu. **Uncovering insecure designs of cellular emergency services (911).** In Proceedings of the 28th Annual International Conference on Mobile Computing And Networking (**ACM MobiCom '22**).
